@@ -22,10 +22,18 @@ public:
     , m_col(col)
     , m_value(val_){ }
 
-    auto operator=(int const &val) {
+//    auto operator=(T val) {
+//
+//        return nullptr;
+//    }
+    auto operator=(const T& val) {
 
         return nullptr;
     }
+//    auto operator=(T&& val) {
+//
+//        return nullptr;
+//    }
 
     friend bool operator==(Cell<T, def_value> &lhs, T const &rhs) {
         return lhs.get_value() == rhs;

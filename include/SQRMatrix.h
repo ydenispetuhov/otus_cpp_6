@@ -7,35 +7,45 @@
 
 
 #include "Matrix.h"
-#include "Row.h"
+#include "LinearMatrix.h"
 #include "Cell.h"
 
 template<typename T>
 struct SQRMatrix : Matrix<T> {
-//    SQRMatrix(SQRMatrix<Row<Cell<int, def_value>>> *pMatrix) {
-//
-//    }
 
 private:
     std::size_t rows_size{};
     std::size_t cols_size{};
-public:
-    ~SQRMatrix() override {}
-
-private:
     std::vector<T> rows;
 public:
-//    SQRMatrix(std::size_t rows, std::size_t rowCols) : rows_size{rows}, cols_size{rowCols} {}
+    SQRMatrix<T>();
 
-    SQRMatrix<T>() : rows{}, rows_size{1}, cols_size{rows.size()} {}
+    ~SQRMatrix();
 
-
-//    SQRMatrix(Matrix<T> &matrix, int idx, const std::vector<Row<T>> &rows) : Matrix(matrix, idx), rows(rows) {}
-
-    T& operator[](int row_) override {
-        return rows.at(row_);;//(Row<Cell<int>> &) nullptr;//static_cast<T>(static_cast<Row<Cell<int>>>(Row<Cell<T>>()));//todo check
-    }
+    T operator[](std::size_t row_);
 };
 
+
+template<typename T>
+struct SQRMatrix<LinearMatrix<T>> : public Matrix<SQRMatrix<LinearMatrix<T>>> {
+
+private:
+    std::size_t rows_size{};
+    std::size_t cols_size{};
+    std::vector<LinearMatrix<T>> rows;
+    using iterator = typename std::vector<T>::iterator;
+public:
+
+    SQRMatrix<LinearMatrix<T>>() : rows{}, rows_size{1}, cols_size{rows.size()} {}
+    ~SQRMatrix() override {  };
+    LinearMatrix<T> operator[](std::size_t row_) {
+        return rows.at(row_);
+    }
+
+
+    iterator begin()   { return rows.begin(); }
+    iterator end()     { return rows.end(); }
+    std::size_t size() override { return rows.size(); }
+};
 
 #endif //OTUS_CPP_6_SQRMATRIX_H
