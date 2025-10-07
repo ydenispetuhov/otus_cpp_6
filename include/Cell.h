@@ -18,22 +18,13 @@ public:
     virtual ~Cell() {}
 
     Cell(int row = 0, int col = 0, int val_ = def_value)
-    : m_row(row)
-    , m_col(col)
-    , m_value(val_){ }
+            : m_row(row), m_col(col), m_value(val_) {}
 
-//    auto operator=(T val) {
-//
-//        return nullptr;
-//    }
-    auto operator=(const T& val) {
-
+    auto operator=(const T &val) {
+        if (val == def_value) return nullptr;
+        m_value = val;
         return nullptr;
     }
-//    auto operator=(T&& val) {
-//
-//        return nullptr;
-//    }
 
     friend bool operator==(Cell<T, def_value> &lhs, T const &rhs) {
         return lhs.get_value() == rhs;
@@ -51,4 +42,5 @@ public:
         return m_value;
     }
 };
+
 #endif //OTUS_CPP_6_CELL_H

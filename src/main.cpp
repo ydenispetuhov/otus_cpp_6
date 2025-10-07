@@ -20,7 +20,7 @@ int main() {
         assert(a == def_value);
         assert(matrix.size() == 0);
 
-        matrix[100][100] == 314;
+        matrix[100][100] = 314;
         assert(matrix[100][100] == 314);
         assert(matrix.size() == 1);
 
