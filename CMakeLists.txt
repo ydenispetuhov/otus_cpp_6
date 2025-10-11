@@ -13,7 +13,11 @@ add_executable(${PROJECT_NAME} ${CPP_SOURCES}
         include/Matrix.h
         include/SQRMatrix.h
         include/LinearMatrix.h
-        include/Cell.h)
+        include/Cell.h
+        src/SparseSQRMatrix.h
+        include/CustomInputIterator.h
+#        src/SparseSQRMatrixIterator.cpp
+)
 
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")

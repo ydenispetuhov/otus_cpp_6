@@ -5,6 +5,7 @@
 #ifndef OTUS_CPP_6_MATRIX_H
 #define OTUS_CPP_6_MATRIX_H
 
+#include <cstddef>
 //general interface
 template<typename T>
 struct Matrix {
