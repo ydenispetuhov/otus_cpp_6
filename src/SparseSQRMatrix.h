@@ -20,18 +20,15 @@ private:
     T cur_value = 0;
     using iterator = class SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>;
     using matrix_type = class SQRMatrix<LinearMatrix<Cell<T>>>;
-    matrix_type origin;
+    matrix_type& origin;
     iterator cur_iterator;
 public:
 
-    SparseSQRMatrix<T>(const matrix_type& sqrmatrix) : cur_row{negative_idx}, cur_col{negative_idx}, origin{sqrmatrix}, cur_iterator{sqrmatrix}{
-//        cur_iterator(sqrmatrix);
-    }
+    SparseSQRMatrix<T>(const matrix_type &sqrmatrix) : cur_row{negative_idx}, cur_col{negative_idx}, origin{sqrmatrix},
+                                                       cur_iterator{&origin} {}
 
-    SparseSQRMatrix<T>(matrix_type &&sqrmatrix) : cur_row{negative_idx}, cur_col{negative_idx}, origin{sqrmatrix}, cur_iterator{sqrmatrix}{
-//        origin = &sqrmatrix;
-//        cur_iterator(&origin);
-    }
+    SparseSQRMatrix<T>(matrix_type &&sqrmatrix) : cur_row{negative_idx}, cur_col{negative_idx}, origin{sqrmatrix},
+                                                  cur_iterator{sqrmatrix} {}
 
     ~SparseSQRMatrix() override {};
 
@@ -111,7 +108,6 @@ public:
         return origin.size();
     }
 
-
     iterator begin() {
         return static_cast<iterator>(cur_iterator.begin());
     }
@@ -119,57 +115,5 @@ public:
     iterator end() {
         return static_cast<iterator>(cur_iterator.end());
     }
-//
-//        iterator begin() {
-//            return cur_iterator.begin();
-//        }
-//
-//        iterator end() {
-//            return cur_iterator.end();
-//        }
-
-//        auto begin() {
-//            auto origin_row_iterator = origin.bein();
-//            auto row_data_begin = *origin_row_iterator;
-//            auto row_ = row_data_begin.first();
-//            auto col_data_begin = row_data_begin.second().begin();
-//            auto col_ = col_data_begin.first();
-//            auto value_ = col_data_begin.second().get_value();
-//            return iterator(std::make_tuple(row_, col_, value_));/*return origin.begin(); */}
-//
-//        auto end() { auto origin_row_iterator = origin.end();
-//            auto row_data_end = *origin_row_iterator;
-//            auto row_ = row_data_end.first();
-//            auto col_data_end = row_data_end.second().begin();
-//            auto col_ = col_data_end.first();
-//            auto value_ = col_data_end.second().get_value();
-//            return iterator(std::make_tuple(row_, col_, value_));/*return origin.end();*/}
-//
-//        auto operator*() {
-//            auto origin_row_iterator = cur_iterator;
-//            auto row_data = *origin_row_iterator;
-//            auto row_ = row_data.first();
-//            auto col_data = row_data.second().begin();
-//            auto col_ = col_data.first();
-//            auto value_ = col_data.second().get_value();
-//            return std::make_tuple(row_, col_, value_);
-//        }
-
-//        auto& operator*() {
-//            auto origin_row_iterator = m_ptr;
-//            auto row_data = *origin_row_iterator;
-//            auto row_ = row_data.first();
-//            auto col_data = row_data.second().begin();
-//            auto col_ = col_data.first();
-//            auto value_ = col_data.second().get_value();
-//            return std::make_tuple(row_, col_, value_);
-//        }
-
-//
-//    auto &operator++() {
-//        cur_iterator++;
-//        return cur_iterator;
-//    }
-
 };
 

@@ -35,6 +35,10 @@ public:
     iterator find(std::size_t row_);
 
     auto erase(iterator row_);
+
+    iterator begin();
+
+    iterator end();
 };
 
 

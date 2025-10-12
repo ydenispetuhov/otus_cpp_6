@@ -11,11 +11,8 @@ int main() {
     int const def_value = 0;
     int const matrix_size = 10;
 
-    SQRMatrix<LinearMatrix<Cell<int, def_value>>> sqrmatrix;
-//    decltype(auto) sqrmatrix = std::make_unique<SQRMatrix<LinearMatrix<Cell<int, def_value>>>>();
-//    SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, int>> iter{sqrmatrix};
 //    auto proxi = SparseSQRMatrix(sqrmatrix);
-    auto proxi = SparseSQRMatrix(std::move(sqrmatrix));
+    auto proxi = SparseSQRMatrix(SQRMatrix<LinearMatrix<Cell<int, def_value>>>());
     { /* Task's description checks */
         assert(proxi.size() == 0);
 

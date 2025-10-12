@@ -27,6 +27,10 @@ public:
     auto erase(iterator col_);
 
     std::size_t size();
+
+    iterator begin();
+
+    iterator end();
 };
 
 template<typename T>

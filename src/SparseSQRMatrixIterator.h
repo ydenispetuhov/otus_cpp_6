@@ -7,71 +7,70 @@
 #include <tuple>
 
 template<typename T>
-struct SparseSQRMatrixIterator : public CustomInputIterator<std::tuple<std::size_t, std::size_t, T>> {};
-
-
+struct SparseSQRMatrixIterator{};
 
 template<typename T>
-struct SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>> : public CustomInputIterator<std::tuple<std::size_t, std::size_t, T>> {
-    using pointer = typename std::map<std::size_t, LinearMatrix<Cell<T>>>*;
-//    using pointer = T *;
+struct SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>> {
+    using matrix_pointer = typename std::map<std::size_t, LinearMatrix<Cell<T>>>::iterator;
+    using row_pointer = typename std::map<std::size_t, Cell<T>>::iterator;
 private:
-    SQRMatrix<LinearMatrix<Cell<T>>> matrix;
-    pointer m_ptr;
+    SQRMatrix<LinearMatrix<Cell<T>>>* matrix;
+    matrix_pointer matrix_begin;
+    matrix_pointer matrix_end;
+    row_pointer row_begin;
+    row_pointer row_end;
+    matrix_pointer matrix_ptr;//cur_position
+    row_pointer row_ptr;//cur_position
 public:
-//    using iterator = class SparseSQRMatrixIterator<T>;
     using iterator = class SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>;
-//     SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>(SQRMatrix<LinearMatrix<Cell<T>>>& data_): matrix{data_}, m_ptr{data_.bein()}{}
-//     SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>(SQRMatrix<LinearMatrix<Cell<T>>>&& data_): matrix{data_}{ delete data_;}
-    SparseSQRMatrixIterator<T>() = delete;
-    SparseSQRMatrixIterator(SQRMatrix<LinearMatrix<Cell<T>>> &data_) : matrix{data_}, m_ptr{data_.begin()} {}
+//    SparseSQRMatrixIterator<T>() = delete;
+    SparseSQRMatrixIterator(SQRMatrix<LinearMatrix<Cell<T>>>& data_) :matrix{&data_}//,
+//                                                                      matrix_begin{data_.begin()}, matrix_end{data_.end()} ,
+//                                                                      row_begin{matrix->begin()->second.begin()}, row_end{matrix->end()->second.end()}
+                                                                      {}
 
-    SparseSQRMatrixIterator(SQRMatrix<LinearMatrix<Cell<T>>> &&data_) : matrix{data_} { delete data_; }
+    SparseSQRMatrixIterator(SQRMatrix<LinearMatrix<Cell<T>>>&& data_) :matrix{&data_}//,
+//                                                                       matrix_begin{data_.begin()}, matrix_end{data_.end()} ,
+//                                                                       row_begin{matrix->begin()->second.begin()}, row_end{matrix->end()->second.end()}
+                                                                       {}
 
     std::tuple<std::size_t, std::size_t, T> operator*() {
-        auto origin_row_iterator = m_ptr;
-        auto row_data = *origin_row_iterator;
-        auto row_ = row_data.first();
-        auto col_data = row_data.second().begin();
-        auto col_ = col_data.first();
-        auto value_ = col_data.second().get_value();
+        auto row_ =  matrix_ptr->first;
+        auto col_ =  row_ptr->first;
+        auto value_ = row_ptr->second.get_value();
         return std::make_tuple(row_, col_, value_);
     }
 
     iterator begin() {
+        matrix_begin = matrix->begin();
+        row_begin = matrix->begin()->second.begin();
         return *this;
-//        auto origin_row_iterator = matrix.begin();
-//        auto row_data_begin = *origin_row_iterator;
-//        auto row_ = row_data_begin.first();
-//        auto col_data_begin = row_data_begin.second().begin();
-//        auto col_ = col_data_begin.first();
-//        auto value_ = col_data_begin.second().get_value();
-//        return std::make_tuple(row_, col_, value_);
     }
 
     iterator end() {
+        matrix_begin = matrix->end();
+        row_begin = matrix->end()->second.end();
         return *this;
-//        auto origin_row_iterator = matrix.end();
-//        auto row_data_end = *origin_row_iterator;
-//        auto row_ = row_data_end.first();
-//        auto col_data_end = row_data_end.second().begin();
-//        auto col_ = col_data_end.first();
-//        auto value_ = col_data_end.second().get_value();
-//        return std::make_tuple(row_, col_, value_);
     }
-//
-//        auto& operator*() {
-//            auto origin_row_iterator = m_ptr;
-//            auto row_data = *origin_row_iterator;
-//            auto row_ = row_data.first();
-//            auto col_data = row_data.second().begin();
-//            auto col_ = col_data.first();
-//            auto value_ = col_data.second().get_value();
-//            return std::make_tuple(row_, col_, value_);
-//        }
 
     auto &operator++() {
-        m_ptr++;
+        if(row_ptr != row_end){
+            if(matrix_ptr != matrix_end){
+                row_ptr++;
+            }
+        } else {
+            matrix_ptr++;
+            row_ptr = matrix_ptr->second.begin();
+        }
         return *this;
+    }
+
+    // Операторы сравнения
+    friend bool operator==(const iterator &a, const iterator &b) {
+        return a.matrix_ptr->first == b.matrix_ptr->first && a.row_ptr->first == b.row_ptr->first;
+    }
+
+    friend bool operator!=(const iterator &a, const iterator &b) {
+        return !(a == b);
     }
 };
