@@ -25,7 +25,7 @@ private:
 public:
 
     SparseSQRMatrix<T>(const matrix_type &sqrmatrix) : cur_row{negative_idx}, cur_col{negative_idx}, origin{sqrmatrix},
-                                                       cur_iterator{&origin} {}
+                                                       cur_iterator{sqrmatrix} {}
 
     SparseSQRMatrix<T>(matrix_type &&sqrmatrix) : cur_row{negative_idx}, cur_col{negative_idx}, origin{sqrmatrix},
                                                   cur_iterator{sqrmatrix} {}

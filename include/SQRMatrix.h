@@ -16,15 +16,16 @@ template<typename T>
 struct SQRMatrix : Matrix<T> {
 
 private:
-//    std::size_t rows_size{};
-//    std::size_t cols_size{};
     std::map<std::size_t, T> rows;
-//    using iterator = typename std::map<std::size_t, T>::iterator;
 public:
 
     using iterator = typename std::map<std::size_t, T>::iterator;
 
     SQRMatrix<T>();
+
+//    SQRMatrix<LinearMatrix<Cell<T>>>(T& other_matrix);
+//
+//    SQRMatrix<LinearMatrix<Cell<T>>>(T&& other_matrix);
 
     ~SQRMatrix();
 
@@ -45,17 +46,16 @@ public:
 template<typename T>
 struct SQRMatrix<LinearMatrix<Cell<T>>> : public Matrix<SQRMatrix<LinearMatrix<Cell<T>>>> {
 
-private:
-//    std::size_t rows_size{};
-//    std::size_t cols_size{};
 protected:
     std::map<std::size_t, LinearMatrix<Cell<T>>> rows;
-//    using iterator = typename std::map<std::size_t, LinearMatrix<Cell<T>>>::iterator;
 public:
 
     using iterator = typename std::map<std::size_t, LinearMatrix<Cell<T>>>::iterator;
 
     SQRMatrix<LinearMatrix<Cell<T>>>() : rows{} {}
+//    SQRMatrix<LinearMatrix<Cell<T>>>() : rows{new std::map<std::size_t, LinearMatrix<Cell<T>>>()} {}
+//    SQRMatrix<LinearMatrix<Cell<T>>>(SQRMatrix<LinearMatrix<Cell<T>>>& other_matrix) : rows{other_matrix.rows} {}
+//    SQRMatrix<LinearMatrix<Cell<T>>>(SQRMatrix<LinearMatrix<Cell<T>>>&& other_matrix) : rows{other_matrix.rows} {}
 
     ~SQRMatrix() override {};
 
