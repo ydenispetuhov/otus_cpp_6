@@ -23,9 +23,9 @@ public:
 
     SQRMatrix<T>();
 
-//    SQRMatrix<LinearMatrix<Cell<T>>>(T& other_matrix);
-//
-//    SQRMatrix<LinearMatrix<Cell<T>>>(T&& other_matrix);
+    SQRMatrix(const SQRMatrix<LinearMatrix<Cell<T>>> &other_matrix);
+
+    SQRMatrix(SQRMatrix<LinearMatrix<Cell<T>>> &&other_matrix);
 
     ~SQRMatrix();
 
@@ -53,21 +53,22 @@ public:
     using iterator = typename std::map<std::size_t, LinearMatrix<Cell<T>>>::iterator;
 
     SQRMatrix<LinearMatrix<Cell<T>>>() : rows{} {}
-//    SQRMatrix<LinearMatrix<Cell<T>>>() : rows{new std::map<std::size_t, LinearMatrix<Cell<T>>>()} {}
-//    SQRMatrix<LinearMatrix<Cell<T>>>(SQRMatrix<LinearMatrix<Cell<T>>>& other_matrix) : rows{other_matrix.rows} {}
-//    SQRMatrix<LinearMatrix<Cell<T>>>(SQRMatrix<LinearMatrix<Cell<T>>>&& other_matrix) : rows{other_matrix.rows} {}
+
+    SQRMatrix<LinearMatrix<Cell<T>>>(const SQRMatrix<LinearMatrix<Cell<T>>> &other_matrix) : rows{other_matrix.rows} {}
+
+    SQRMatrix<LinearMatrix<Cell<T>>>(SQRMatrix<LinearMatrix<Cell<T>>> &&other_matrix) : rows{other_matrix.rows} {}
 
     ~SQRMatrix() override {};
 
-    LinearMatrix<Cell<T>>& operator[](std::size_t row_) {
+    LinearMatrix<Cell<T>> &operator[](std::size_t row_) {
         return rows[row_];
     }
 
-    iterator find(std::size_t row_){
+    iterator find(std::size_t row_) {
         return rows.find(row_);
     }
 
-    auto erase(iterator row_){
+    auto erase(iterator row_) {
         return rows.erase(row_);
     }
 

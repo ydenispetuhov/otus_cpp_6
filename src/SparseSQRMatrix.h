@@ -21,11 +21,21 @@ private:
     using iterator = class SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>;
     using matrix_type = class SQRMatrix<LinearMatrix<Cell<T>>>;
     matrix_type& origin;
+    iterator begin_iterator;
+    iterator end_iterator;
 public:
 
-    SparseSQRMatrix<T>(const matrix_type &sqrmatrix) : cur_row{negative_idx}, cur_col{negative_idx}, origin{sqrmatrix} {}
+    SparseSQRMatrix<T>(const matrix_type &sqrmatrix) : cur_row{negative_idx},
+                                                       cur_col{negative_idx},
+                                                       origin{sqrmatrix},
+                                                       begin_iterator{iterator(&origin, origin.begin(), origin.begin()->second.begin())},
+                                                       end_iterator{iterator(&origin, origin.end(), origin.end()->second.end())} {}
 
-    SparseSQRMatrix<T>(matrix_type &&sqrmatrix) : cur_row{negative_idx}, cur_col{negative_idx}, origin{sqrmatrix} {}
+    explicit SparseSQRMatrix<T>(matrix_type &&sqrmatrix) : cur_row{negative_idx},
+                                                           cur_col{negative_idx},
+                                                           origin{sqrmatrix},
+                                                           begin_iterator{iterator(origin, origin.begin(), origin.begin()->second.begin())},
+                                                           end_iterator{iterator(origin, origin.end(), origin.end()->second.end())} {}
 
     ~SparseSQRMatrix() override {};
 
@@ -106,11 +116,11 @@ public:
     }
 
     iterator begin() {
-        return iterator(origin, origin.begin(), origin.begin()->second.begin());
+        return begin_iterator;
     }
 
     iterator end() {
-        return iterator(origin, origin.end(), origin.end()->second.end());
+        return end_iterator;
     }
 };
 

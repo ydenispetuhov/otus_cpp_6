@@ -7,34 +7,66 @@
 #include <tuple>
 
 template<typename T>
-struct SparseSQRMatrixIterator{};
+struct SparseSQRMatrixIterator {
+};
 
 template<typename T>
 struct SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>> {
     using matrix_iterator = typename std::map<std::size_t, LinearMatrix<Cell<T>>>::iterator;
     using row_iterator = typename std::map<std::size_t, Cell<T>>::iterator;
 private:
-    SQRMatrix<LinearMatrix<Cell<T>>>& matrix;
-    matrix_iterator& matrix_ptr;//cur_position
-    row_iterator& row_ptr;//cur_position
+    SQRMatrix<LinearMatrix<Cell<T>>> &matrix;
+    matrix_iterator &matrix_ptr;//cur_position
+    row_iterator &row_ptr;//cur_position
 public:
     using iterator = class SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>;
-    SparseSQRMatrixIterator(SQRMatrix<LinearMatrix<Cell<T>>>& data_, matrix_iterator&& matrix_ptr_, row_iterator&& row_ptr_) :matrix{data_}, matrix_ptr{matrix_ptr_}, row_ptr{row_ptr_}{}
+
+    SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>(const iterator &other) = default;
+
+    SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>(iterator &&other) :
+            matrix{other.getMatrix()}, matrix_ptr{other.getMatrixIter()}, row_ptr{other.getRowIter()} {}
+
+    SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>(SQRMatrix<LinearMatrix<Cell<T>>> &&data_,
+                                                                     matrix_iterator &&matrix_ptr_,
+                                                                     row_iterator &&row_ptr_) :
+            matrix{&data_}, matrix_ptr{&matrix_ptr_}, row_ptr{&row_ptr_} {}
+
+    SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>(SQRMatrix<LinearMatrix<Cell<T>>> &data_,
+                                                                     matrix_iterator &matrix_ptr_,
+                                                                     row_iterator &row_ptr_) :
+            matrix{&data_}, matrix_ptr{&matrix_ptr_}, row_ptr{&row_ptr_} {}
+
+    SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>(SQRMatrix<LinearMatrix<Cell<T>>> &data_,
+                                                                     matrix_iterator &&matrix_ptr_,
+                                                                     row_iterator &&row_ptr_) :
+            matrix{data_}, matrix_ptr{matrix_ptr_}, row_ptr{row_ptr_} {}
+
+    SQRMatrix<LinearMatrix<Cell<T>>> &getMatrix() {
+        return matrix;
+    }
+
+    matrix_iterator &getMatrixIter() {
+        return matrix_ptr;
+    }
+
+    row_iterator &getRowIter() {
+        return row_ptr;
+    }
 
     std::tuple<std::size_t, std::size_t, T> operator*() {
-        auto row_ =  matrix_ptr->first;
-        auto col_ =  row_ptr->first;
+        auto row_ = matrix_ptr->first;
+        auto col_ = row_ptr->first;
         auto value_ = row_ptr->second.get_value();
         return std::make_tuple(row_, col_, value_);
     }
 
     auto &operator++() {
-        if(row_ptr != matrix.end()->second.end()){
-            if(matrix_ptr !=  matrix.end()){
-                ++row_ptr;
+        if (row_ptr != matrix.end()->second.end()) {
+            if (matrix_ptr != matrix.end()) {
+                row_ptr = (++row_ptr);
             }
         } else {
-            ++matrix_ptr;
+            matrix_ptr = (++matrix_ptr);
             row_ptr = matrix_ptr->second.begin();
         }
         return *this;
