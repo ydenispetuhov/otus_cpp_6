@@ -24,9 +24,9 @@ int main() {
         assert(proxi[100][100] == 314);
         assert(proxi.size() == 1);
 
-//        proxi[100][100] = def_value;
-//        assert(proxi[100][100] == def_value);
-//        assert(proxi.size() == 0);
+        proxi[100][100] = def_value;
+        assert(proxi[100][100] == def_value);
+        assert(proxi.size() == 0);
     }
 
     int matrix_index = matrix_size - 1;
@@ -52,6 +52,8 @@ int main() {
 //        std::tie(x, y, v) = cell;
 //        std::cout << "[" << x << "," << y << "]" << " = " << v << std::endl;
 //    }
+    auto begin = proxi.begin();
+    auto end = proxi.end();
 
     for(auto i = proxi.begin(); i != proxi.end(); ++i){
         std::tie(x, y, v) = *i;

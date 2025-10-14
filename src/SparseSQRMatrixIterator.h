@@ -11,34 +11,15 @@ struct SparseSQRMatrixIterator{};
 
 template<typename T>
 struct SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>> {
-    using matrix_pointer = typename std::map<std::size_t, LinearMatrix<Cell<T>>>::iterator;
-    using row_pointer = typename std::map<std::size_t, Cell<T>>::iterator;
+    using matrix_iterator = typename std::map<std::size_t, LinearMatrix<Cell<T>>>::iterator;
+    using row_iterator = typename std::map<std::size_t, Cell<T>>::iterator;
 private:
     SQRMatrix<LinearMatrix<Cell<T>>>& matrix;
-    matrix_pointer matrix_begin;
-    matrix_pointer matrix_end;
-    row_pointer row_begin;
-    row_pointer row_end;
-    matrix_pointer matrix_ptr;//cur_position
-    row_pointer row_ptr;//cur_position
+    matrix_iterator& matrix_ptr;//cur_position
+    row_iterator& row_ptr;//cur_position
 public:
     using iterator = class SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>;
-    SparseSQRMatrixIterator(SQRMatrix<LinearMatrix<Cell<T>>>& data_) :matrix{data_}{
-        matrix_begin = matrix.begin();
-        row_begin = matrix.begin()->second.begin();
-        matrix_ptr = matrix_begin;
-        row_ptr = row_begin;
-        matrix_end = matrix.end();
-        row_end = matrix.end()->second.end();
-    }
-    SparseSQRMatrixIterator(SQRMatrix<LinearMatrix<Cell<T>>>&& data_) :matrix{data_}{
-        matrix_begin = matrix.begin();
-        row_begin = matrix.begin()->second.begin();
-        matrix_ptr = matrix_begin;
-        row_ptr = row_begin;
-        matrix_end = matrix.end();
-        row_end = matrix.end()->second.end();
-    }
+    SparseSQRMatrixIterator(SQRMatrix<LinearMatrix<Cell<T>>>& data_, matrix_iterator&& matrix_ptr_, row_iterator&& row_ptr_) :matrix{data_}, matrix_ptr{matrix_ptr_}, row_ptr{row_ptr_}{}
 
     std::tuple<std::size_t, std::size_t, T> operator*() {
         auto row_ =  matrix_ptr->first;
@@ -47,21 +28,9 @@ public:
         return std::make_tuple(row_, col_, value_);
     }
 
-    iterator begin() {
-        matrix_begin = matrix.begin();
-        row_begin = matrix_begin->second.begin();
-        return *this;
-    }
-
-    iterator end() {
-        matrix_end = matrix.end();
-        row_end = matrix_end->second.end();
-        return *this;
-    }
-
     auto &operator++() {
-        if(row_ptr != row_end){
-            if(matrix_ptr != matrix_end){
+        if(row_ptr != matrix.end()->second.end()){
+            if(matrix_ptr !=  matrix.end()){
                 ++row_ptr;
             }
         } else {
@@ -73,7 +42,7 @@ public:
 
     // Операторы сравнения
     friend bool operator==(const iterator &a, const iterator &b) {
-        return a.matrix_ptr->first == b.matrix_ptr->first && a.row_ptr->first == b.row_ptr->first;
+        return a.matrix_ptr == b.matrix_ptr && a.row_ptr == b.row_ptr;
     }
 
     friend bool operator!=(const iterator &a, const iterator &b) {
