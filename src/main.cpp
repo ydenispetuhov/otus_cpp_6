@@ -48,10 +48,14 @@ int main() {
     std::size_t x = 0;
     std::size_t y = 0;
     int v = 0;
-    for(auto cell : proxi) {
-        std::tie(x, y, v) = cell;
+    for(auto i = proxi.begin(); i != proxi.end(); ++i) {
+        std::tie(x, y, v) = *i;
         std::cout << "[" << x << "," << y << "]" << " = " << v << std::endl;
     }
+//    for(auto && cell : proxi) {
+//        std::tie(x, y, v) = cell;
+//        std::cout << "[" << x << "," << y << "]" << " = " << v << std::endl;
+//    }
 
     return 0;
 }

@@ -20,7 +20,7 @@ private:
     T cur_value = 0;
     using iterator = class SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>;
     using matrix_type = class SQRMatrix<LinearMatrix<Cell<T>>>;
-    matrix_type& origin;
+    matrix_type origin;
     iterator begin_iterator;
     iterator end_iterator;
 public:
@@ -28,8 +28,8 @@ public:
     SparseSQRMatrix<T>(const matrix_type &sqrmatrix) : cur_row{negative_idx},
                                                        cur_col{negative_idx},
                                                        origin{sqrmatrix},
-                                                       begin_iterator{iterator(&origin, origin.begin(), origin.begin()->second.begin())},
-                                                       end_iterator{iterator(&origin, origin.end(), origin.end()->second.end())} {}
+                                                       begin_iterator{iterator(origin, origin.begin(), origin.begin()->second.begin())},
+                                                       end_iterator{iterator(origin, origin.end(), origin.end()->second.end())} {}
 
     explicit SparseSQRMatrix<T>(matrix_type &&sqrmatrix) : cur_row{negative_idx},
                                                            cur_col{negative_idx},
