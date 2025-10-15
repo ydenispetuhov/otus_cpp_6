@@ -12,12 +12,10 @@ struct Matrix {
 public:
 
     virtual ~Matrix<T>() {};
-//    Matrix(Matrix<T> &matrix_) = 0;
 
     T& operator[](std::size_t row_) const {return static_cast<T const&>(*this)[row_];}
 
     std::size_t size() const {return static_cast<T const&>(*this).size();}
-//    virtual std::size_t size();
 };
 
 #endif //OTUS_CPP_6_MATRIX_H

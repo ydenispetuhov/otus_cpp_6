@@ -11,7 +11,6 @@ int main() {
     int const def_value = 0;
     int const matrix_size = 10;
 
-//    auto proxi = SparseSQRMatrix(sqrmatrix);
     auto proxi = SparseSQRMatrix(SQRMatrix<LinearMatrix<Cell<int, def_value>>>());
     { /* Task's description checks */
         assert(proxi.size() == 0);
@@ -48,14 +47,11 @@ int main() {
     std::size_t x = 0;
     std::size_t y = 0;
     int v = 0;
-    for(auto i = proxi.begin(); i != proxi.end(); ++i) {
-        std::tie(x, y, v) = *i;
+
+    for(auto && cell : proxi) {
+        std::tie(x, y, v) = cell;
         std::cout << "[" << x << "," << y << "]" << " = " << v << std::endl;
     }
-//    for(auto && cell : proxi) {
-//        std::tie(x, y, v) = cell;
-//        std::cout << "[" << x << "," << y << "]" << " = " << v << std::endl;
-//    }
 
     return 0;
 }
