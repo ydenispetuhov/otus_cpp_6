@@ -16,8 +16,8 @@ struct SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>> {
     using row_iterator = typename std::map<std::size_t, Cell<T>>::iterator;
 private:
     SQRMatrix<LinearMatrix<Cell<T>>> &matrix;
-    matrix_iterator matrix_ptr;//cur_position
-    row_iterator row_ptr;//cur_position
+    matrix_iterator matrix_ptr;//cur_position row
+    row_iterator row_ptr;//cur_position col
 public:
     using iterator = class SparseSQRMatrixIterator<std::tuple<std::size_t, std::size_t, T>>;
 
@@ -64,9 +64,21 @@ public:
         if (matrix_ptr != matrix.end() && row_ptr != matrix.end()->second.end()) {
             if (row_ptr != matrix_ptr->second.end()) {
                 ++row_ptr;
+                if (row_ptr == matrix_ptr->second.end()) {// jump to next row
+                    ++matrix_ptr;
+                    if (matrix_ptr != matrix.end()) {
+                        row_ptr = matrix_ptr->second.begin();
+                    } else {
+                        row_ptr = matrix_ptr->second.end();
+                    }
+                }
             } else {
                 ++matrix_ptr;
-                row_ptr = matrix_ptr->second.begin();
+                if (matrix_ptr != matrix.end()) {
+                    row_ptr = matrix_ptr->second.begin();
+                } else {
+                    row_ptr = matrix_ptr->second.end();
+                }
             }
         }
         return *this;

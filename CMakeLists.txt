@@ -16,7 +16,7 @@ add_executable(${PROJECT_NAME} ${CPP_SOURCES}
         include/Cell.h
         src/SparseSQRMatrix.h
         include/CustomInputIterator.h
-#        src/SparseSQRMatrixIterator.cpp
+        src/SparseSQRMatrixIterator.h
 )
 
 set(CPACK_GENERATOR DEB)
