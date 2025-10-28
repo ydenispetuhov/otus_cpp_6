@@ -11,6 +11,11 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Permission can be added at job level or workflow level
+permissions:
+  contents: write
 
 jobs:
   build:
